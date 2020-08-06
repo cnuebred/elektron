@@ -1,0 +1,25 @@
+{
+  "name": "elektron",
+  "version": "1.0.0",
+  "description": "Bot Electron for discord servers",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "bot",
+    "discord",
+    "electron"
+  ],
+  "author": "Jonatan (cube)",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "mongoose": "^5.9.18",
+    "qrcode": "^1.4.4",
+    "quick.db": "^7.1.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
