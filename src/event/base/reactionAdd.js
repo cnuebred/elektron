@@ -11,19 +11,21 @@ const checkData = async function () {
     if (!emojiDatabase) return console.log('database is empty')
     const emojiObject = Object.keys(emojiDatabase).find(key => {
         let obj = emojiDatabase[key]
-        return obj.emoji.startsWith('<') ? obj.emoji.substring(obj.emoji.indexOf(':') + 1, obj.emoji.lastIndexOf(':')) : obj.emoji === this.event.emoji.name
-            && obj.messageID === this.event.message
+        messageCondition = obj.messageID === this.event.d.message_id
+        emojiCondition = obj.emoji.startsWith('<') ? obj.emoji.substring(obj.emoji.indexOf(':') + 1, obj.emoji.lastIndexOf(':')) : obj.emoji === this.event.d.emoji.name
+        return messageCondition && emojiCondition
     })
     return emojiDatabase[emojiObject]
 }
 
 module.exports.reactionAdd = async (bot, event) => {
     this.event = event
-    this.guild = bot.guilds.cache.find(x => x.id === event.guild)
-    const member = this.guild.members.cache.find(x => x.id === event.user)
+    this.guild = bot.guilds.cache.find(x => x.id === event.d.guild_id)
 
-    if (member.id === bot.user.id) return
+    const member = await this.guild.members.fetch(event.d.user_id)
+
     if (!member) return console.log('Can not find author of reaction')
+    if (member.id === bot.user.id) return
 
     const emojiData = await checkData.call(this)
 

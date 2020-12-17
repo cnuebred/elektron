@@ -27,7 +27,6 @@ module.exports.addGuild = async function (guild) {
     this.guildSchema = guildSchema
     if (!database) return saveGuildData.call(this)
 
-    if (database.removeData) {
+    if (database.removeData)
         await save(null, 'removeData', database.removeData.replace('+', '-'), tool)
-    }
 }

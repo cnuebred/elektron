@@ -11,26 +11,32 @@ const saveUserData = async function () {
         this.userSchema
     ).save()
         .then(res => {
-            console.log(`new user added ${res.username}`)
+            // console.log(res)
+            console.log(`new user added`)
         })
         .catch(err => {
             console.log(err)
         })
 }
 
-module.exports.addUser = async function (member) {
-    const user = member.user
-    const filter = { userID: user.id }
+module.exports.addUser = async function (user, guild, join = true) {
+    const member = await guild.members.fetch({ user: user.id, force: true })
+    if (!member) return console.log('member doesn\'t exist - adduser')
+    const filter = { userID: member.id }
     const database = await load(null, new Tool(null, { std: 'stdu', filter: filter }))
 
-    const guildName = `${member.guild.name.replace(' ', '-')}__${member.guild.id}`
+    console.log(member)
+
+    const guildName = `${member.guild.id}`
     const option = {
         joinedTimestamp: member.joinedTimestamp
     }
-    const userSchema = await new ObjectMongo({ guilds: { [guildName]: option } }).user(user)
+    const userSchema = await new ObjectMongo({ guilds: { [guildName]: option } }).user(member.user)
     this.userSchema = userSchema
-    greetingEvent(member)
-    if (!database || !database.guilds) return saveUserData.call(this)
+    if (join)
+        greetingEvent(member)
+    console.log(userSchema)
+    if (!database) return saveUserData.call(this)
 
     const saveDataUser = async (data) => {
         await save(null, guildName, data, new Tool(null, {
@@ -39,7 +45,9 @@ module.exports.addUser = async function (member) {
             folder: 'guilds'
         }))
     }
-    const conditions = Object.getOwnPropertyNames(database.guilds).includes(guildName)
+    let conditions = false
+    if (database.guilds)
+        conditions = Object.getOwnPropertyNames(database.guilds).includes(guildName)
     if (conditions)
         saveDataUser({ ...database.guilds[guildName], ...option })
     else if (!conditions)

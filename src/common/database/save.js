@@ -29,14 +29,14 @@ class sqlite {
     async setDatabase() {
         let filter = ''
         if (this.msg)
-            filter = this.filter
+            filter = this.msg.guild.id
         else
-            filtr = this.tool.tableID
-        if (data === 'X') {
+            filter = this.tool.tableID
+        if (this.data === 'X') {
             quick.delete(`${this.tool.folder}_${filter}.${this.name}`)
             if (this.tool.confirm) return console.log('delete data complete') //TODO
         }
-        quick.set(`${this.tool.folder}_${filtr}.${this.name}`, this.data)
+        quick.set(`${this.tool.folder}_${filter}.${this.name}`, this.data)
         return console.log('save data complete') //TODO
     }
 }

@@ -23,9 +23,11 @@ async function addField() {
     this.fieldNumber++
     let title = this.paramsObject[this.objectChild].title
     let description = this.paramsObject[this.objectChild].description
+    let inline = this.paramsObject[this.objectChild].inline
+    if (!inline) inline = false
     this.paramsObject[this.objectChild] === undefined
         ? null
-        : this.embedMessage[this.setuper](title, description)
+        : this.embedMessage[this.setuper](title, description, inline)
 }
 async function setAuthor() {
     if (this.paramsObject.author === 'user')

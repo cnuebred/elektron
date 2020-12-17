@@ -2,6 +2,7 @@ const load = require("../../../../common/database/load")
 const Tool = require("../../../../common/object/toolObject")
 const globalVaribles = require("../../../../common/object/globalVaribles")
 const smartEmbed = require("../../../../common/useful/smartEmbed")
+const ErrorLog = require("../../../commandError")
 const allElementsArray = globalVaribles.NAME_SETTINGS_ROLE.concat(globalVaribles.NAME_SETTINGS_CHANNEL)
 
 
@@ -10,7 +11,7 @@ module.exports = async (bot, msg, params) => {
     var check = ''
     var message = ''
     const databaseBasic = await load(msg, new Tool(msg, { std: 'stdg', folder: `configuration.${msg.configurationOption}` }))
-    if (!databaseBasic) return console.log('i can\'t find database basic')
+    if (!databaseBasic) return new ErrorLog(msg).log({ code: 0.001, option: 'basic-data' }) //console.log('i can\'t find database basic')
 
     for (element of allElementsArray) {
         let savedElement = databaseBasic[element]

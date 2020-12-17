@@ -42,7 +42,7 @@ const awaitDataPermission = async function () {
             }
             if (this.saved)
                 await smartEmbed(this.bot, this.msg, {
-                    description: `**Pomyślnie zapisano uprawnienia**\n> Aby je sprawdzić wpisz >load permission`
+                    description: `**Pomyślnie zapisano uprawnienia**\n> Aby je sprawdzić wpisz ;load permission`
                 });
         })
         .catch(collected => {

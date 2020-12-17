@@ -4,6 +4,9 @@ module.exports = GlobalMethods = {
     constructor(options = null) {
         this.options = options
     },
+    async algorithmLevel(lvl) {
+        return Math.floor(10 + (lvl * (lvl * 2 + Math.pow(lvl, 2))) * 3 / (Math.log2(lvl + 2)))
+    },
     isGuild(msg) {
         return (msg.channel.type === 'dm');
     },

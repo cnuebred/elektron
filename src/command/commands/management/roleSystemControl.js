@@ -24,8 +24,10 @@ async function roleSystem(bot, msg, params) {
 
     await getMembersCollection.call(this)
 
-    if (this.members)
+    if (this.members) {
         await roleController.call(this)
+        msg.channel.send('**Done**')
+    }
     else
         return console.log('collection is empty')
 }

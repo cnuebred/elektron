@@ -20,6 +20,7 @@ module.exports = getCommandModules = {
         const commandModule = require(`../commands/${commandObject.category}/${commandObject.source}`)
 
         Object.assign(package, { channelType: commandObject.channelType ? commandObject.channelType : 'guild' })
+        Object.assign(this.msg, package)
         return Object.assign(commandModule, package)
 
     },

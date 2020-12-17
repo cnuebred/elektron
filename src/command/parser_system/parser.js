@@ -1,5 +1,7 @@
 const getCommandModules = require("./module")
 const permission = require("./permission")
+const ErrorLog = require("../commandError")
+
 
 const commandParser = {
     parser: async function (basicData) {
@@ -12,7 +14,9 @@ const commandParser = {
         if (!barrier) return console.log('missing permission on barrier section')
         const barrierChannel = await permission.permissionChannelWall()
         if (!barrierChannel) return console.log('invaild channel type')
-        if (commandModule.params[1] === '--help') return commandHelper()
+
+        if (commandModule.params.includes('--help')) return new ErrorLog(this.msg).show(null, this.msg.commandName)
+
         if (!commandModule.method) return console.log('method function, don\'t exist')
         await commandModule.method(
             basicData.bot,
@@ -21,7 +25,5 @@ const commandParser = {
         )
     }
 }
-
-
 
 module.exports = commandParser.parser

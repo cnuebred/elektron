@@ -4,8 +4,6 @@ const { save } = require('../common/database/save')
 const Tool = require('../common/object/toolObject')
 const { equalPermissions } = require("./parser_system/permission")
 const globalVaribles = require("../common/object/globalVaribles")
-const { Guild } = require("discord.js")
-
 
 
 module.exports = class ErrorLog {
@@ -22,7 +20,7 @@ module.exports = class ErrorLog {
         this.errorDatabase = errorDatabase
     }
     async show(code, command) {
-        if (!code && !command)
+        if (!(code || command))
             return console.log('i can\'t find any params')
         let packageCommands = this.msg.packageCommands
         let checker = await equalPermissions(packageCommands.authorPermission, packageCommands.permission)
@@ -31,15 +29,15 @@ module.exports = class ErrorLog {
 
         if (command && !code) {
             this.category = 'helper'
-            this.key = command
+            this.key = command.toString()
         } else if (code) {
             this.category = 'code'
-            this.key = code
+            this.key = code.toString()
         }
 
         try {
             embedData = this.errorDatabase[this.category][this.key]
-        } catch{
+        } catch {
             return console.log('i can\'t find helper module')
         }
         if (checker)
@@ -47,11 +45,15 @@ module.exports = class ErrorLog {
                 description: 'Nie udało się załadować helpera', footer: `Napisz do ${globalVaribles.OWNER_TAG}`
             })
     }
-    async log(code, guild) {
+
+    async log(dataLog, guild) {
+        let code = dataLog.code
+        let option = dataLog.option
         const tool = new Tool(null, { std: 'stdg', filter: { guildID: this.msg ? this.msg.guild.id : guild } })
         const errorLogsDatabase = (await load(null, tool)).errorLogs
         await this.main()
         let dataForSave = this.errorDatabase.code[code].oneline
+        dataForSave = dataForSave.replace(/%data/gi, option ? option : '')
         try {
             let lenghtOfErrorList = errorLogsDatabase.length
             await errorLogsDatabase.unshift(`${code} - ${dataForSave}`)

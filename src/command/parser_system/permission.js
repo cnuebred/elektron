@@ -13,6 +13,7 @@ module.exports = permissionObject = {
         if (msg.author.id === globalVaribles.OWNER_ID || msg.author.id === bot.user.id) permission = 'owner'
         else if (msg.author.id === msg.guild.ownerID || await this.getPermissionRoles()) permission = 'admin'
         else permission = 'user'
+        console.log(permission)
         Object.assign(commandModule.packageCommands, { authorPermission: permission })
         return await this.equalPermissions(permission, commandModule.packageCommands.permission)
     },
@@ -22,23 +23,23 @@ module.exports = permissionObject = {
 
         let availableCommands = await load(
             this.msg,
-            new Tool(this.msg, { sts: 'stdg', folder: `configuration.${namePermissionRole}-commands` })
+            new Tool(this.msg, { std: 'stdg', folder: `configuration.permission.${namePermissionRole}-commands` })
         )
         if (!availableCommands) return //TODO
         if (!availableCommands.includes(this.commandModule.params[0])) return //TODO
         else return true
     },
     getMemberRole: async function () {
-        let member = await globalMethods.findMember(this.msg);
+        let member = await globalMethods.findMember(this.msg, this.msg.author.id);
         let roleName = ''
 
         for (role of namePermissionRoles) {
             let roleID = await load(
                 this.msg,
-                new Tool(this.msg, { sts: 'stdg', folder: `configuration.basic.${role}` })
+                new Tool(this.msg, { std: 'stdg', folder: `configuration.basic.${role}` })
             )
             if (!roleID) continue;
-            if (member.roles.find(x => x.id === roleID)) {
+            if (member.roles.cache.find(x => x.id === roleID)) {
                 roleName = role
                 break
             }

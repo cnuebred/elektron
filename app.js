@@ -9,6 +9,7 @@ const { addGuild } = require("./src/event/base/addGuild");
 const { removeGuild } = require("./src/event/base/removeGuild");
 const { addUser } = require("./src/event/base/userJoin");
 const clock = require("./src/event/create/clock");
+'use strict'
 
 require("dotenv").config() // add permission to .env file
 connect() //connect to mongo database
@@ -19,10 +20,14 @@ bot.on("ready", async () => {
 })
 
 bot.on("message", async (message) => {
+    if (message.type == 'GUILD_MEMBER_JOIN') {
+        addUser(message.author, message.guild)
+    }
     messageEvent(bot, message)
 })
 bot.on("raw", (e) => {
     if (!globalVaribles.EVENTS.hasOwnProperty(e.t)) return;
+    console.log(e.d)
     let data = {
         user: e.d.user_id,
         message: e.d.message_id,
@@ -38,8 +43,5 @@ bot.on('guildCreate', async guild => {
 })
 bot.on('guildDelete', async guild => {
     removeGuild(guild)
-})
-bot.on('guildMemberAdd', async user => {
-    addUser(user)
 })
 bot.login(process.env.SECRET_BOT_TOKEN)

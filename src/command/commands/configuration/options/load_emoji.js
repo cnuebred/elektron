@@ -47,6 +47,7 @@ const getData = async function (databaseEmoji) {
 }
 
 module.exports = async (bot, msg, params) => {
+    const error = new ErrorLog(msg)
     this.bot = bot
     this.msg = msg
     this.finallMessage = ''
@@ -55,7 +56,7 @@ module.exports = async (bot, msg, params) => {
     this.i = 1
 
     const databaseEmoji = await load(msg, new Tool(msg, { std: 'stdg', folder: `configuration.${msg.configurationOption}` }))
-    if (!databaseEmoji) return console.log('i can\'t find database emoji')
+    if (!databaseEmoji) return error.log({ code: 0.001, option: 'emoji-data' })//console.log('i can\'t find database emoji')
 
     this.listOfEmoji = Object.getOwnPropertyNames(databaseEmoji)
 
@@ -71,7 +72,7 @@ module.exports = async (bot, msg, params) => {
         }
     })
     await setGroup.call(this)
-    if (this.i > 25) return console.log('error load_emoji - embed too long')
+    if (this.i > 25) return error.show({ code: 0.001, option: 'basic-data' })//console.log('error load_emoji - embed too long')
 
     return smartEmbed(bot, msg, Object.assign({
         title: 'Dane emoji',

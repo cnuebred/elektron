@@ -14,7 +14,7 @@
   "author": "Jonatan (cube)",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.2.0",
+    "discord.js": "^12.4.1",
     "mongoose": "^5.9.18",
     "qrcode": "^1.4.4",
     "quick.db": "^7.1.1"

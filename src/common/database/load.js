@@ -20,7 +20,7 @@ class sqlite {
     async getDatabase() {
         if (this.msg) this.tool.filter = this.msg.guild.id
         else this.tool.filter = this.tool.tableID
-        const data = quick.get(`${this.tool.folder}_${this.tool.filter}_${this.tool.collection}`)
+        const data = quick.get(`${this.tool.folder}_${this.tool.filter}.${this.tool.collection}`)
         return data ? data : undefined
     }
 }
